@@ -7,9 +7,9 @@ import ProductSearch from "@/components/search/ProductSearch";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { cart } = useCart();
+  const { cartItems } = useCart();
   
-  const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <header className="bg-white border-b border-sari-cream-200 sticky top-0 z-30">
