@@ -16,12 +16,15 @@ const Navbar = () => {
       <div className="container-custom mx-auto">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/" className="font-display text-2xl font-bold text-sari-terracotta-800">
+          <Link to="/" className="font-display text-2xl font-bold text-sari-terracotta-800 shrink-0">
             Sari Organics
           </Link>
           
+          {/* Search - Now more visible and expanded */}
+          <ProductSearch />
+          
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6 shrink-0">
             <Link to="/" className="text-sari-terracotta-700 hover:text-sari-terracotta-900">
               Home
             </Link>
@@ -37,12 +40,8 @@ const Navbar = () => {
             <Link to="/contact" className="text-sari-terracotta-700 hover:text-sari-terracotta-900">
               Contact
             </Link>
-          </nav>
           
-          {/* Actions */}
-          <div className="flex items-center space-x-4">
-            <ProductSearch />
-            
+            {/* Cart */}
             <Link to="/cart" className="relative text-sari-terracotta-700 hover:text-sari-terracotta-900">
               <ShoppingCart className="h-5 w-5" />
               {cartItemsCount > 0 && (
@@ -59,7 +58,7 @@ const Navbar = () => {
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
-          </div>
+          </nav>
         </div>
         
         {/* Mobile Navigation */}

@@ -5,6 +5,7 @@ import { Search, X } from "lucide-react";
 import { allProducts } from "@/data/products";
 import { Product } from "@/types";
 import { useDebounce } from "@/hooks/useDebounce";
+import { Input } from "@/components/ui/input";
 
 const ProductSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,25 +65,26 @@ const ProductSearch = () => {
   };
 
   return (
-    <div ref={searchRef} className="relative">
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center text-sari-terracotta-600 hover:text-sari-terracotta-800"
-        aria-label="Search products"
-      >
-        <Search className="h-5 w-5" />
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-screen max-w-md bg-white rounded-lg shadow-lg z-50 p-4 border border-sari-cream-200">
+    <div ref={searchRef} className="relative flex-grow max-w-sm mx-4">
+      {!isOpen ? (
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="flex items-center gap-2 text-sari-terracotta-600 hover:text-sari-terracotta-800 bg-sari-cream-100 hover:bg-sari-cream-200 rounded-md px-4 py-2 w-full transition-colors"
+          aria-label="Search products"
+        >
+          <Search className="h-5 w-5" />
+          <span className="text-sari-terracotta-700">Search products...</span>
+        </button>
+      ) : (
+        <div className="w-full">
           <form onSubmit={handleSearch} className="relative">
             <div className="relative">
-              <input
+              <Input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search products..."
-                className="w-full pl-10 pr-10 py-2 border border-sari-cream-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sari-terracotta-500"
+                className="w-full pl-10 pr-10 bg-white border-sari-terracotta-300 focus:border-sari-terracotta-500 focus:ring-sari-terracotta-500"
                 autoFocus
               />
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-sari-terracotta-400" />
@@ -98,7 +100,7 @@ const ProductSearch = () => {
             </div>
             
             {results.length > 0 && (
-              <div className="mt-4 max-h-96 overflow-y-auto divide-y divide-sari-cream-200">
+              <div className="mt-4 max-h-96 overflow-y-auto divide-y divide-sari-cream-200 bg-white rounded-lg shadow-lg z-50 border border-sari-cream-200">
                 {results.map((product) => (
                   <div 
                     key={product.id}
@@ -140,7 +142,7 @@ const ProductSearch = () => {
             )}
             
             {debouncedQuery && results.length === 0 && (
-              <div className="mt-4 py-3 text-center text-sari-terracotta-600">
+              <div className="mt-4 py-3 text-center text-sari-terracotta-600 bg-white rounded-lg shadow-lg border border-sari-cream-200">
                 No products found for "{query}"
               </div>
             )}
