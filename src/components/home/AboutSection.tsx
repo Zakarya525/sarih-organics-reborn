@@ -26,40 +26,40 @@ const AboutSection = () => {
           
           <div className="space-y-6">
             <div className="inline-block">
-              <span className="bg-sari-green-100 text-sari-green-800 rounded-full px-4 py-1 text-sm font-medium">
+              <span className="bg-sari-cream-100 text-sari-terracotta-800 rounded-full px-4 py-1 text-sm font-medium">
                 Our Story
               </span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-sari-green-800">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-sari-terracotta-800">
               Committed to Sustainable Organic Products
             </h2>
-            <p className="text-sari-green-600">
+            <p className="text-sari-terracotta-600">
               Founded in 2010, Sari Horganics was born from a passion to create truly organic products while supporting local Balinese farmers. From our humble beginnings at the Ubud market, we've grown while staying true to our values.
             </p>
-            <p className="text-sari-green-600">
+            <p className="text-sari-terracotta-600">
               Every product is carefully crafted using traditional methods, with ingredients sourced from our own organic farm and trusted local suppliers. We're committed to sustainability and ethical practices at every step.
             </p>
             <div className="grid grid-cols-2 gap-4 md:gap-8">
               <div>
-                <div className="text-3xl font-display font-bold text-sari-green-600">15+</div>
-                <p className="text-sari-green-700">Years of Experience</p>
+                <div className="text-3xl font-display font-bold text-sari-terracotta-600">15+</div>
+                <p className="text-sari-terracotta-700">Years of Experience</p>
               </div>
               <div>
-                <div className="text-3xl font-display font-bold text-sari-green-600">100%</div>
-                <p className="text-sari-green-700">Organic Ingredients</p>
+                <div className="text-3xl font-display font-bold text-sari-terracotta-600">100%</div>
+                <p className="text-sari-terracotta-700">Organic Ingredients</p>
               </div>
               <div>
-                <div className="text-3xl font-display font-bold text-sari-green-600">50+</div>
-                <p className="text-sari-green-700">Local Farmers Supported</p>
+                <div className="text-3xl font-display font-bold text-sari-terracotta-600">50+</div>
+                <p className="text-sari-terracotta-700">Local Farmers Supported</p>
               </div>
               <div>
-                <div className="text-3xl font-display font-bold text-sari-green-600">30+</div>
-                <p className="text-sari-green-700">Unique Products</p>
+                <div className="text-3xl font-display font-bold text-sari-terracotta-600">30+</div>
+                <p className="text-sari-terracotta-700">Unique Products</p>
               </div>
             </div>
             <Link 
               to="/about" 
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sari-green-600 hover:bg-sari-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sari-green-500 transition"
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sari-terracotta-600 hover:bg-sari-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sari-terracotta-500 transition"
             >
               Learn More About Us
             </Link>

@@ -55,16 +55,16 @@ export default {
 				},
         // Sari Horganics custom colors
         sari: {
-          green: {
-            100: '#f5f7e9',
-            200: '#e6ebc9',
-            300: '#cedea1',
-            400: '#a6c06e',
-            500: '#7a9840',
-            600: '#5d7b2c',
-            700: '#46601f',
-            800: '#374b18',
-            900: '#2e4015',
+          terracotta: {
+            100: '#f9e7e0',
+            200: '#f2cfc0',
+            300: '#eab7a1',
+            400: '#e09f82',
+            500: '#C05627', // Main brand color
+            600: '#a44820',
+            700: '#7f3919',
+            800: '#5c2913',
+            900: '#3b1a0c',
           },
           brown: {
             100: '#f7f2e9',

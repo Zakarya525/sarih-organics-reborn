@@ -31,13 +31,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="mt-4">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-lg font-medium text-sari-green-800">{product.name}</h3>
-              <p className="text-sm text-sari-green-600">{product.category}</p>
+              <h3 className="text-lg font-medium text-sari-terracotta-800">{product.name}</h3>
+              <p className="text-sm text-sari-terracotta-600">{product.category}</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-medium text-sari-green-800">${product.price.toFixed(2)}</p>
+              <p className="text-lg font-medium text-sari-terracotta-800">${product.price.toFixed(2)}</p>
               {product.oldPrice && (
-                <p className="text-sm text-sari-green-500 line-through">
+                <p className="text-sm text-sari-terracotta-500 line-through">
                   ${product.oldPrice.toFixed(2)}
                 </p>
               )}
@@ -47,14 +47,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
         
         <button
           onClick={handleAddToCart}
-          className="absolute bottom-20 right-4 bg-white shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-sari-green-100"
+          className="absolute bottom-20 right-4 bg-white shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-sari-cream-100"
           aria-label="Add to cart"
         >
-          <ShoppingCart className="h-5 w-5 text-sari-green-700" />
+          <ShoppingCart className="h-5 w-5 text-sari-terracotta-700" />
         </button>
         
         {product.isNew && (
-          <span className="absolute top-4 left-4 bg-sari-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+          <span className="absolute top-4 left-4 bg-sari-terracotta-600 text-white text-xs font-bold px-2 py-1 rounded">
             NEW
           </span>
         )}

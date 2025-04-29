@@ -27,10 +27,10 @@ const TestimonialsSection = () => {
     <section className="py-16 bg-sari-cream-100">
       <div className="container-custom">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-sari-green-800">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-sari-terracotta-800">
             What Our Customers Say
           </h2>
-          <p className="mt-4 text-sari-green-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-sari-terracotta-600 max-w-2xl mx-auto">
             Hear from people who love our organic products
           </p>
         </div>
@@ -45,12 +45,12 @@ const TestimonialsSection = () => {
                   </svg>
                 ))}
               </div>
-              <blockquote className="text-sari-green-700 italic mb-4">
+              <blockquote className="text-sari-terracotta-700 italic mb-4">
                 "{testimonial.content}"
               </blockquote>
               <div>
-                <p className="font-medium text-sari-green-800">{testimonial.author}</p>
-                <p className="text-sm text-sari-green-600">{testimonial.location}</p>
+                <p className="font-medium text-sari-terracotta-800">{testimonial.author}</p>
+                <p className="text-sm text-sari-terracotta-600">{testimonial.location}</p>
               </div>
             </div>
           ))}

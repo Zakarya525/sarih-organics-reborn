@@ -20,42 +20,45 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <h1 className="text-xl md:text-2xl font-display font-bold text-sari-green-600">
+            <h1 className="text-xl md:text-2xl font-display font-bold text-sari-terracotta-600">
               Sari Horganics
             </h1>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="font-medium text-sari-green-800 hover:text-sari-green-600 transition">
+            <Link to="/" className="font-medium text-sari-terracotta-800 hover:text-sari-terracotta-600 transition">
               Home
             </Link>
-            <Link to="/shop" className="font-medium text-sari-green-800 hover:text-sari-green-600 transition">
+            <Link to="/shop" className="font-medium text-sari-terracotta-800 hover:text-sari-terracotta-600 transition">
               Shop
             </Link>
-            <Link to="/about" className="font-medium text-sari-green-800 hover:text-sari-green-600 transition">
+            <Link to="/about" className="font-medium text-sari-terracotta-800 hover:text-sari-terracotta-600 transition">
               About
             </Link>
-            <Link to="/contact" className="font-medium text-sari-green-800 hover:text-sari-green-600 transition">
+            <Link to="/blog" className="font-medium text-sari-terracotta-800 hover:text-sari-terracotta-600 transition">
+              Blog
+            </Link>
+            <Link to="/contact" className="font-medium text-sari-terracotta-800 hover:text-sari-terracotta-600 transition">
               Contact
             </Link>
           </nav>
 
           {/* Icons */}
           <div className="flex items-center space-x-4">
-            <Link to="/account" className="text-sari-green-800 hover:text-sari-green-600 transition">
+            <Link to="/account" className="text-sari-terracotta-800 hover:text-sari-terracotta-600 transition">
               <User size={20} />
             </Link>
-            <Link to="/cart" className="text-sari-green-800 hover:text-sari-green-600 transition relative">
+            <Link to="/cart" className="text-sari-terracotta-800 hover:text-sari-terracotta-600 transition relative">
               <ShoppingCart size={20} />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-sari-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-sari-terracotta-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
             </Link>
             <button
-              className="md:hidden text-sari-green-800 hover:text-sari-green-600 transition"
+              className="md:hidden text-sari-terracotta-800 hover:text-sari-terracotta-600 transition"
               onClick={toggleMenu}
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -69,28 +72,35 @@ const Navbar = () => {
             <nav className="flex flex-col space-y-3">
               <Link
                 to="/"
-                className="px-4 py-2 text-sari-green-800 hover:bg-sari-green-100 rounded-md"
+                className="px-4 py-2 text-sari-terracotta-800 hover:bg-sari-cream-100 rounded-md"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
                 to="/shop"
-                className="px-4 py-2 text-sari-green-800 hover:bg-sari-green-100 rounded-md"
+                className="px-4 py-2 text-sari-terracotta-800 hover:bg-sari-cream-100 rounded-md"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Shop
               </Link>
               <Link
                 to="/about"
-                className="px-4 py-2 text-sari-green-800 hover:bg-sari-green-100 rounded-md"
+                className="px-4 py-2 text-sari-terracotta-800 hover:bg-sari-cream-100 rounded-md"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
               <Link
+                to="/blog"
+                className="px-4 py-2 text-sari-terracotta-800 hover:bg-sari-cream-100 rounded-md"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Blog
+              </Link>
+              <Link
                 to="/contact"
-                className="px-4 py-2 text-sari-green-800 hover:bg-sari-green-100 rounded-md"
+                className="px-4 py-2 text-sari-terracotta-800 hover:bg-sari-cream-100 rounded-md"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
