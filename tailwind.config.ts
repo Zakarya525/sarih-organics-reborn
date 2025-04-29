@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,16 +53,42 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+        // Sari Horganics custom colors
+        sari: {
+          green: {
+            100: '#f5f7e9',
+            200: '#e6ebc9',
+            300: '#cedea1',
+            400: '#a6c06e',
+            500: '#7a9840',
+            600: '#5d7b2c',
+            700: '#46601f',
+            800: '#374b18',
+            900: '#2e4015',
+          },
+          brown: {
+            100: '#f7f2e9',
+            200: '#e8dbc6',
+            300: '#d3bb8e',
+            400: '#c2a26c',
+            500: '#ad864e',
+            600: '#8c6d41',
+            700: '#6b5331',
+            800: '#524127',
+            900: '#3d3120',
+          },
+          cream: {
+            100: '#fffef8',
+            200: '#fffaed',
+            300: '#fff4d8',
+            400: '#ffecc1',
+            500: '#ffe2a3',
+            600: '#f0ce8d',
+            700: '#d9b774',
+            800: '#c1a061',
+            900: '#a68954',
+          }
+        }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,12 +111,38 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
+        },
+        'fade-out': {
+          '0%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          },
+          '100%': {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          }
+        },
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fade-in 0.3s ease-out',
+        'fade-out': 'fade-out 0.3s ease-out',
+			},
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
+      },
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
