@@ -12,6 +12,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Search from "./pages/Search";
 import AdminOrders from "./pages/Admin/Orders";
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/search" element={<Search />} />
             {/* Admin Routes */}
             <Route path="/admin/orders" element={<AdminOrders />} />
             <Route path="*" element={<NotFound />} />
