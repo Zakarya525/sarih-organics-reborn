@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getProductBySlug } from "@/data/products";
@@ -35,7 +36,7 @@ const ProductDetail = () => {
           const { data, error } = await supabase
             .from('reviews')
             .select('*')
-            .eq('product_id', product.id)
+            .eq('product_id', product.id.toString())
             .eq('is_approved', true)
             .order('created_at', { ascending: false });
           
@@ -66,7 +67,7 @@ const ProductDetail = () => {
     const fetchRelatedProducts = async () => {
       if (product) {
         // Convert numeric ID to string for Supabase compatibility
-        const related = await getRelatedProducts(product.id.toString());
+        const related = await getRelatedProducts(product.category);
         setRelatedProducts(related);
       }
     };
@@ -100,7 +101,7 @@ const ProductDetail = () => {
       supabase
         .from('reviews')
         .select('*')
-        .eq('product_id', product.id)
+        .eq('product_id', product.id.toString())
         .eq('is_approved', true)
         .order('created_at', { ascending: false })
         .then(({ data, error }) => {
@@ -122,15 +123,13 @@ const ProductDetail = () => {
     }
   };
 
-  // Convert numeric ID to string for Supabase compatibility
-  const getRelatedProducts = async (productId: string) => {
+  // Get related products by category
+  const getRelatedProducts = async (category: string): Promise<Product[]> => {
     try {
-      // Simulate fetching related products (replace with your actual logic)
-      // For now, just filter out the current product
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('category', product.category);
+        .eq('category', category);
       
       if (error) {
         console.error("Error fetching related products:", error);
@@ -138,7 +137,26 @@ const ProductDetail = () => {
       }
       
       // Filter out the current product
-      const filteredProducts = data.filter(p => p.id !== product.id);
+      const filteredProducts = data.filter(p => p.id.toString() !== product.id.toString())
+        .map(item => ({
+          id: Number(item.id) || parseInt(item.id, 10) || Date.now(),
+          name: item.name,
+          slug: item.slug,
+          description: item.description,
+          price: item.price,
+          oldPrice: item.old_price,
+          discount: item.discount,
+          image: item.image,
+          images: item.images,
+          category: item.category,
+          isNew: item.is_new,
+          isBestSeller: item.is_best_seller,
+          inStock: item.in_stock,
+          stockQuantity: item.stock_quantity,
+          weight: item.weight,
+          ingredients: item.ingredients,
+          tags: item.tags,
+        }));
       return filteredProducts as Product[];
     } catch (error) {
       console.error("Error fetching related products:", error);

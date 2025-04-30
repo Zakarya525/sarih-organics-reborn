@@ -1,7 +1,7 @@
 
 // Product related types
 export interface Product {
-  id: number;
+  id: number | string;
   name: string;
   slug: string;
   description: string;
@@ -26,12 +26,12 @@ export interface Product {
   };
   tags?: string[];
   reviews?: ProductReview[];
-  relatedProducts?: number[];
+  relatedProducts?: (number | string)[];
 }
 
 export interface ProductReview {
-  id: number;
-  userId: number;
+  id: number | string;
+  userId: number | string;
   userName: string;
   rating: number;
   comment: string;
@@ -53,8 +53,8 @@ export enum OrderStatus {
 }
 
 export interface OrderItem {
-  id: number;
-  productId: number;
+  id: number | string;
+  productId: number | string;
   productName: string;
   quantity: number;
   price: number;
@@ -62,8 +62,8 @@ export interface OrderItem {
 }
 
 export interface Order {
-  id: number;
-  userId: number;
+  id: number | string;
+  userId: number | string;
   orderNumber: string;
   date: string;
   status: OrderStatus;
@@ -80,7 +80,7 @@ export interface Order {
 
 // User related types
 export interface User {
-  id: number;
+  id: number | string;
   email: string;
   firstName: string;
   lastName: string;
@@ -91,7 +91,7 @@ export interface User {
 }
 
 export interface Address {
-  id: number;
+  id: number | string;
   name: string;
   addressLine1: string;
   addressLine2?: string;

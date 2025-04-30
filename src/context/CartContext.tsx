@@ -6,8 +6,8 @@ import { toast } from "@/components/ui/sonner";
 interface CartContextProps {
   cartItems: CartItem[];
   addToCart: (product: Product, quantity: number) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  removeFromCart: (productId: number | string) => void;
+  updateQuantity: (productId: number | string, quantity: number) => void;
   clearCart: () => void;
   cartTotal: number;
   cartCount: number;
@@ -54,14 +54,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: number | string) => {
     setCartItems((prevItems) => {
       const filteredItems = prevItems.filter((item) => item.id !== productId);
       return filteredItems;
     });
   };
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: number | string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;

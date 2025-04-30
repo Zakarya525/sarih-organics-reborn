@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
@@ -8,14 +9,17 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
 import { useNavigate } from "react-router-dom";
 import { OrderStatus } from "@/types";
-import { useUser } from "@clerk/clerk-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const Checkout = () => {
-  const { cart, clearCart } = useCart();
+  const { cartItems: cart, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { user } = useUser();
+  const [userInfo, setUserInfo] = useState({
+    firstName: "",
+    lastName: "",
+    id: ""
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -27,13 +31,17 @@ const Checkout = () => {
   });
 
   useEffect(() => {
-    if (user) {
+    // Get user info from local storage or session if available
+    const savedUserInfo = localStorage.getItem("userInfo");
+    if (savedUserInfo) {
+      const userInfo = JSON.parse(savedUserInfo);
+      setUserInfo(userInfo);
       setFormData(prev => ({
         ...prev,
-        name: `${user.firstName} ${user.lastName}`,
+        name: `${userInfo.firstName} ${userInfo.lastName}`,
       }));
     }
-  }, [user]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -74,65 +82,64 @@ const Checkout = () => {
     }
   };
 
-const insertOrder = async () => {
-  try {
-    // Convert the product IDs to strings for Supabase
-    const orderItems = cart.map(item => ({
-      product_id: item.id.toString(), // Convert to string to match UUID type
-      product_name: item.name,
-      product_price: item.price,
-      quantity: item.quantity,
-      total: item.price * item.quantity
-    }));
+  const insertOrder = async () => {
+    try {
+      // Convert the product IDs to strings for Supabase
+      const orderItems = cart.map(item => ({
+        product_id: item.id.toString(), // Convert to string to match UUID type
+        product_name: item.name,
+        product_price: item.price,
+        quantity: item.quantity,
+        total: item.price * item.quantity
+      }));
 
-    const { data: orderData, error: orderError } = await supabase
-      .from('orders')
-      .insert({
-        user_id: user?.id,
-        order_number: `ORD-${Date.now()}`,
-        date: new Date().toISOString(),
-        status: OrderStatus.Pending,
-        subtotal: calculateSubtotal(),
-        shipping: shippingCost,
-        tax: tax,
-        total: total,
-        shipping_address: formData.address,
-        payment_method: formData.paymentMethod,
-      })
-      .select('id')
-      .single();
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: userInfo.id || null,
+          order_number: `ORD-${Date.now()}`,
+          date: new Date().toISOString(),
+          status: OrderStatus.Pending,
+          subtotal: calculateSubtotal(),
+          shipping: shippingCost,
+          tax: tax,
+          total: total,
+          shipping_address: formData.address,
+          payment_method: formData.paymentMethod,
+        })
+        .select('id')
+        .single();
 
-    if (orderError) {
-      console.error("Error inserting order:", orderError);
-      throw new Error("Failed to insert order");
+      if (orderError) {
+        console.error("Error inserting order:", orderError);
+        throw new Error("Failed to insert order");
+      }
+
+      const orderId = orderData.id;
+
+      // Insert order items
+      const { error: orderItemsError } = await supabase
+        .from('order_items')
+        .insert(
+          orderItems.map(item => ({
+            order_id: orderId,
+            product_id: item.product_id,
+            product_name: item.product_name,
+            quantity: item.quantity,
+            price: item.product_price,
+            total: item.total,
+          }))
+        );
+
+      if (orderItemsError) {
+        console.error("Error inserting order items:", orderItemsError);
+        throw new Error("Failed to insert order items");
+      }
+    } catch (error) {
+      console.error("Error in insertOrder:", error);
+      throw error;
     }
-
-    const orderId = orderData.id;
-
-    // Insert order items
-    const { error: orderItemsError } = await supabase
-      .from('order_items')
-      .insert(
-        orderItems.map(item => ({
-          order_id: orderId,
-          product_id: item.product_id,
-          product_name: item.product_name,
-          quantity: item.quantity,
-          price: item.product_price,
-          total: item.total,
-        }))
-      );
-
-    if (orderItemsError) {
-      console.error("Error inserting order items:", orderItemsError);
-      throw new Error("Failed to insert order items");
-    }
-  } catch (error) {
-    console.error("Error in insertOrder:", error);
-    throw error;
-  }
-};
-
+  };
 
   return (
     <div className="container mx-auto mt-10">
