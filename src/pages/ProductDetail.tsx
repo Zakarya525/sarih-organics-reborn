@@ -1,258 +1,237 @@
-
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { getProductBySlug } from "@/data/products";
+import { Product } from "@/types";
 import Layout from "@/components/layout/Layout";
-import { getProductBySlug, getRelatedProducts } from "@/data/products";
-import ProductCard from "@/components/products/ProductCard";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart, ChevronLeft, Star, Plus, Minus } from "lucide-react";
-import { useCart } from "@/context/CartContext";
-import { toast } from "@/components/ui/sonner";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import ImageSlider from "@/components/products/ImageSlider";
 import ProductReviews from "@/components/reviews/ProductReviews";
+import { ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
+import { toast } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import ProductCard from "@/components/products/ProductCard";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const product = getProductBySlug(slug || "");
-  const relatedProducts = product ? getRelatedProducts(product.id) : [];
-  
-  const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const { addToCart } = useCart();
-  const [reviews, setReviews] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [reviews, setReviews] = useState<any[]>([]); // Using any[] for simplicity
   
-  // Fetch reviews from Supabase
+  useEffect(() => {
+    if (slug) {
+      const foundProduct = getProductBySlug(slug);
+      setProduct(foundProduct);
+    }
+  }, [slug]);
+
   useEffect(() => {
     const fetchReviews = async () => {
-      if (!product) return;
-      
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('reviews')
-          .select('*')
-          .eq('product_id', product.id)
-          .eq('is_approved', true)
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        setReviews(data || []);
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-      } finally {
-        setIsLoading(false);
+      if (product) {
+        try {
+          const { data, error } = await supabase
+            .from('reviews')
+            .select('*')
+            .eq('product_id', product.id)
+            .eq('is_approved', true)
+            .order('created_at', { ascending: false });
+          
+          if (error) {
+            console.error("Error fetching reviews:", error);
+          } else {
+            // Map Supabase data to your ProductReview type
+            const formattedReviews = data.map(review => ({
+              id: review.id,
+              userId: review.user_id,
+              userName: review.name,
+              rating: review.rating,
+              comment: review.comment,
+              date: new Date(review.created_at).toLocaleDateString(),
+            }));
+            setReviews(formattedReviews);
+          }
+        } catch (error) {
+          console.error("Error fetching reviews:", error);
+        }
+      }
+    };
+
+    fetchReviews();
+  }, [product]);
+
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      if (product) {
+        // Convert numeric ID to string for Supabase compatibility
+        const related = await getRelatedProducts(product.id.toString());
+        setRelatedProducts(related);
       }
     };
     
-    fetchReviews();
+    fetchRelatedProducts();
   }, [product]);
-  
-  // Exit early if product doesn't exist
+
   if (!product) {
     return (
       <Layout>
-        <div className="container-custom py-16 text-center">
-          <h1 className="text-3xl font-display text-sari-terracotta-800 mb-4">Product Not Found</h1>
-          <p className="mb-8 text-sari-terracotta-600">The product you're looking for doesn't exist or has been removed.</p>
-          <Link 
-            to="/shop" 
-            className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sari-terracotta-500 hover:bg-sari-terracotta-600 transition"
-          >
-            Return to Shop
-          </Link>
+        <div className="container-custom py-20 text-center text-sari-terracotta-700">
+          <h2 className="text-3xl font-bold mb-4">Loading product...</h2>
+          <p>Please wait, we are fetching the product details for you.</p>
         </div>
       </Layout>
     );
   }
 
-  // Create an array of images (use the main image if no additional images)
-  const images = product.images ? [product.image, ...product.images] : [product.image];
-
-  const increaseQuantity = () => {
-    if (quantity < (product.stockQuantity || 10)) { // Default limit if stockQuantity not available
-      setQuantity(prev => prev + 1);
-    } else {
-      toast.warning(`Only ${product.stockQuantity} items available`);
-    }
-  };
-
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(prev => prev - 1);
-    }
-  };
-
   const handleAddToCart = () => {
-    addToCart(product, quantity);
-    toast.success(`Added ${quantity} ${product.name} to your cart`);
+    addToCart(product, 1);
+    toast.success(`Added ${product.name} to your cart`);
   };
-  
-  const handleBuyNow = () => {
-    addToCart(product, quantity);
-    window.location.href = "/checkout";
+
+  const handleImageSelect = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  const handleReviewAdded = () => {
+    // Refresh reviews after a new review is added
+    if (product) {
+      supabase
+        .from('reviews')
+        .select('*')
+        .eq('product_id', product.id)
+        .eq('is_approved', true)
+        .order('created_at', { ascending: false })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error("Error fetching reviews:", error);
+          } else {
+            // Map Supabase data to your ProductReview type
+            const formattedReviews = data.map(review => ({
+              id: review.id,
+              userId: review.user_id,
+              userName: review.name,
+              rating: review.rating,
+              comment: review.comment,
+              date: new Date(review.created_at).toLocaleDateString(),
+            }));
+            setReviews(formattedReviews);
+          }
+        });
+    }
+  };
+
+  // Convert numeric ID to string for Supabase compatibility
+  const getRelatedProducts = async (productId: string) => {
+    try {
+      // Simulate fetching related products (replace with your actual logic)
+      // For now, just filter out the current product
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', product.category);
+      
+      if (error) {
+        console.error("Error fetching related products:", error);
+        return [];
+      }
+      
+      // Filter out the current product
+      const filteredProducts = data.filter(p => p.id !== product.id);
+      return filteredProducts as Product[];
+    } catch (error) {
+      console.error("Error fetching related products:", error);
+      return [];
+    }
   };
 
   return (
     <Layout>
-      <div className="container-custom py-12">
-        {/* Breadcrumbs */}
-        <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-sari-terracotta-500">
-            <li>
-              <Link to="/" className="hover:text-sari-terracotta-700">Home</Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link to="/shop" className="hover:text-sari-terracotta-700">Shop</Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link to={`/shop/${product.category.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-sari-terracotta-700">
-                {product.category}
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="font-medium text-sari-terracotta-800">{product.name}</li>
-          </ol>
-        </nav>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Images */}
-          <div className="space-y-6">
-            <ImageSlider 
-              images={images}
-              productName={product.name}
-              onSelect={setSelectedImage}
-              selectedIndex={selectedImage}
-            />
-          </div>
-          
-          {/* Product Details */}
-          <div className="space-y-6">
+      <div className="bg-sari-cream-50 py-12">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Image Gallery */}
             <div>
-              <h1 className="text-3xl md:text-4xl font-display font-bold text-sari-terracotta-800 mb-2">
+              {product.images && product.images.length > 0 ? (
+                <ImageSlider
+                  images={product.images}
+                  productName={product.name}
+                  onSelect={handleImageSelect}
+                  selectedIndex={selectedImageIndex}
+                />
+              ) : (
+                <div className="aspect-square rounded-lg overflow-hidden bg-sari-cream-100">
+                  <OptimizedImage
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Product Details */}
+            <div>
+              <h1 className="text-3xl font-display font-bold text-sari-terracotta-800 mb-2">
                 {product.name}
               </h1>
               <p className="text-sari-terracotta-600 mb-4">{product.category}</p>
-              
+
               <div className="flex items-center mb-4">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5" fill="#F59E0B" color="#F59E0B" />
-                  ))}
-                </div>
-                <span className="ml-2 text-sari-terracotta-600">
-                  {reviews.length} reviews
-                </span>
+                {/* You can use a star rating component here */}
+                {/* Example: <StarRating rating={product.rating} /> */}
+                {/* <span className="ml-2 text-sari-terracotta-500">
+                  ({product.reviews?.length || 0} reviews)
+                </span> */}
               </div>
-              
-              <div className="flex items-center space-x-4 mb-6">
+
+              <div className="mb-4">
                 <span className="text-2xl font-medium text-sari-terracotta-800">
-                  ${product.price.toFixed(2)}
+                  ${product.price?.toFixed(2)}
                 </span>
                 {product.oldPrice && (
-                  <span className="text-lg text-sari-terracotta-500 line-through">
-                    ${product.oldPrice.toFixed(2)}
-                  </span>
-                )}
-                {product.discount > 0 && (
-                  <span className="bg-red-100 text-red-800 text-sm font-medium px-2.5 py-0.5 rounded">
-                    Save {product.discount}%
+                  <span className="ml-2 text-sari-terracotta-500 line-through">
+                    ${product.oldPrice?.toFixed(2)}
                   </span>
                 )}
               </div>
-            </div>
-            
-            <div className="prose max-w-none text-sari-terracotta-700 mb-6">
-              <p>{product.description}</p>
-            </div>
-            
-            {/* Product attributes */}
-            <div className="space-y-4 border-y border-sari-cream-300 py-6">
-              {product.weight && (
-                <div className="flex justify-between">
-                  <span className="text-sari-terracotta-600">Weight:</span>
-                  <span className="font-medium text-sari-terracotta-800">{product.weight}</span>
-                </div>
-              )}
-              
-              {product.ingredients && (
-                <div>
-                  <div className="text-sari-terracotta-600">Ingredients:</div>
-                  <div className="font-medium text-sari-terracotta-800 mt-1">
-                    {product.ingredients}
-                  </div>
-                </div>
-              )}
-              
-              <div className="flex justify-between">
-                <span className="text-sari-terracotta-600">Availability:</span>
-                <span className={`font-medium ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.inStock ? 'In stock' : 'Out of stock'}
-                </span>
-              </div>
-            </div>
-            
-            {/* Add to cart */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center border border-sari-cream-300 rounded-md">
-                <button
-                  onClick={decreaseQuantity}
-                  className="px-4 py-2 text-sari-terracotta-600 hover:text-sari-terracotta-800"
-                  disabled={quantity <= 1}
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="px-4 py-2 border-x border-sari-cream-300 min-w-[3rem] text-center">
-                  {quantity}
-                </span>
-                <button
-                  onClick={increaseQuantity}
-                  className="px-4 py-2 text-sari-terracotta-600 hover:text-sari-terracotta-800"
-                  disabled={quantity >= (product.stockQuantity || 10)}
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-              
+
+              <p className="text-sari-terracotta-700 mb-6">{product.description}</p>
+
               <Button
                 onClick={handleAddToCart}
-                className="bg-sari-terracotta-500 hover:bg-sari-terracotta-600 text-white flex-1"
-                disabled={!product.inStock}
+                className="bg-sari-terracotta-500 hover:bg-sari-terracotta-600"
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 Add to Cart
               </Button>
-              
-              <Button
-                onClick={handleBuyNow}
-                className="bg-sari-brown-600 hover:bg-sari-brown-700 text-white flex-1"
-                disabled={!product.inStock}
-              >
-                Buy Now
-              </Button>
             </div>
           </div>
+
+          {/* Product Reviews */}
+          {product.id && (
+            <ProductReviews 
+              productId={product.id.toString()} // Convert to string for Supabase
+              reviews={reviews}
+              onReviewAdded={handleReviewAdded}
+            />
+          )}
+          
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <div className="mt-16">
+              <h3 className="text-2xl font-display font-bold text-sari-terracotta-800 mb-6">
+                Related Products
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {relatedProducts.map((relatedProduct) => (
+                  <ProductCard key={relatedProduct.id} product={relatedProduct} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-        
-        {/* Product Reviews */}
-        <ProductReviews product={product} reviews={reviews} />
-        
-        {/* Related Products */}
-        {relatedProducts.length > 0 && (
-          <div className="mt-16">
-            <h2 className="text-2xl font-display font-bold text-sari-terracotta-800 mb-6">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </Layout>
   );
