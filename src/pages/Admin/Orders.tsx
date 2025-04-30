@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,7 @@ const Orders = () => {
   const paginatedOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
-  const handleStatusChange = (orderId: number, newStatus: OrderStatus) => {
+  const handleStatusChange = (orderId: string | number, newStatus: OrderStatus) => {
     setCurrentOrders(prevOrders =>
       prevOrders.map(order =>
         order.id === orderId ? { ...order, status: newStatus } : order
@@ -55,7 +54,7 @@ const Orders = () => {
     toast.success(`Order #${orderId} status updated to ${newStatus}`);
   };
 
-  const handleDeleteOrder = (orderId: number) => {
+  const handleDeleteOrder = (orderId: string | number) => {
     if (confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
       setCurrentOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
       toast.success(`Order #${orderId} has been deleted`);
