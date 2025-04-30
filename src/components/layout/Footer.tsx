@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-xl font-display font-bold">Sari Horganics</h3>
+            <h3 className="text-xl font-display font-bold">Sari Organics</h3>
             <p className="text-sari-cream-100 text-sm">
               Natural, organic products crafted with care from Bali. Supporting local farmers and sustainable practices since 2010.
             </p>
@@ -87,10 +87,10 @@ const Footer = () => {
                 <p>Jalan Raya Ubud, Bali, Indonesia</p>
               </li>
               <li>
-                <p>+62 123 456 7890</p>
+                <p>+92 304 0717083</p>
               </li>
               <li>
-                <p>info@sarihorganics.com</p>
+                <p>info@sariorganics.com</p>
               </li>
             </ul>
           </div>
@@ -98,7 +98,7 @@ const Footer = () => {
 
         <div className="border-t border-sari-green-700 mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-sari-cream-100">© 2025 Sari Horganics. All rights reserved.</p>
+            <p className="text-sm text-sari-cream-100">© 2025 Sari Organics. All rights reserved.</p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <Link to="/privacy-policy" className="text-sm text-sari-cream-100 hover:text-white transition">
                 Privacy Policy

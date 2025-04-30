@@ -15,6 +15,9 @@ import BlogPost from "./pages/BlogPost";
 import Search from "./pages/Search";
 import AdminOrders from "./pages/Admin/Orders";
 import NotFound from "./pages/NotFound";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +37,9 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
             {/* Admin Routes */}
             <Route path="/admin/orders" element={<AdminOrders />} />
             <Route path="*" element={<NotFound />} />

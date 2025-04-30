@@ -1,22 +1,53 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { getProductBySlug, getRelatedProducts } from "@/data/products";
 import ProductCard from "@/components/products/ProductCard";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ChevronLeft, ChevronRight, Star, Plus, Minus } from "lucide-react";
+import { ShoppingCart, ChevronLeft, Star, Plus, Minus } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "@/components/ui/sonner";
+import ImageSlider from "@/components/products/ImageSlider";
+import ProductReviews from "@/components/reviews/ProductReviews";
+import { supabase } from "@/integrations/supabase/client";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const product = getProductBySlug(slug || "");
   const relatedProducts = product ? getRelatedProducts(product.id) : [];
   
-  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Fetch reviews from Supabase
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!product) return;
+      
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('product_id', product.id)
+          .eq('is_approved', true)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        setReviews(data || []);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchReviews();
+  }, [product]);
   
   // Exit early if product doesn't exist
   if (!product) {
@@ -39,14 +70,6 @@ const ProductDetail = () => {
   // Create an array of images (use the main image if no additional images)
   const images = product.images ? [product.image, ...product.images] : [product.image];
 
-  const handlePrevImage = () => {
-    setSelectedImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const handleNextImage = () => {
-    setSelectedImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
   const increaseQuantity = () => {
     if (quantity < (product.stockQuantity || 10)) { // Default limit if stockQuantity not available
       setQuantity(prev => prev + 1);
@@ -63,6 +86,12 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
+    toast.success(`Added ${quantity} ${product.name} to your cart`);
+  };
+  
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    window.location.href = "/checkout";
   };
 
   return (
@@ -92,74 +121,12 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-6">
-            {/* Main Image */}
-            <div className="relative bg-sari-cream-100 rounded-lg overflow-hidden aspect-square">
-              <img
-                src={images[selectedImage]}
-                alt={product.name}
-                className="w-full h-full object-contain"
-              />
-              
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={handlePrevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md hover:bg-white transition-colors"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft className="h-5 w-5 text-sari-terracotta-800" />
-                  </button>
-                  <button
-                    onClick={handleNextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md hover:bg-white transition-colors"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight className="h-5 w-5 text-sari-terracotta-800" />
-                  </button>
-                </>
-              )}
-              
-              {/* Product badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {product.isNew && (
-                  <span className="bg-sari-terracotta-500 text-white text-xs font-bold px-2 py-1 rounded">
-                    NEW
-                  </span>
-                )}
-                {product.isBestSeller && (
-                  <span className="bg-sari-brown-500 text-white text-xs font-bold px-2 py-1 rounded">
-                    BESTSELLER
-                  </span>
-                )}
-              </div>
-              
-              {product.discount > 0 && (
-                <span className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                  -{product.discount}%
-                </span>
-              )}
-            </div>
-            
-            {/* Thumbnail Images */}
-            {images.length > 1 && (
-              <div className="grid grid-cols-5 gap-3">
-                {images.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`rounded-md overflow-hidden aspect-square border-2 ${
-                      selectedImage === index ? "border-sari-terracotta-500" : "border-transparent"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`${product.name} - image ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+            <ImageSlider 
+              images={images}
+              productName={product.name}
+              onSelect={setSelectedImage}
+              selectedIndex={selectedImage}
+            />
           </div>
           
           {/* Product Details */}
@@ -177,7 +144,7 @@ const ProductDetail = () => {
                   ))}
                 </div>
                 <span className="ml-2 text-sari-terracotta-600">
-                  {product.reviews?.length || 0} reviews
+                  {reviews.length} reviews
                 </span>
               </div>
               
@@ -258,9 +225,20 @@ const ProductDetail = () => {
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 Add to Cart
               </Button>
+              
+              <Button
+                onClick={handleBuyNow}
+                className="bg-sari-brown-600 hover:bg-sari-brown-700 text-white flex-1"
+                disabled={!product.inStock}
+              >
+                Buy Now
+              </Button>
             </div>
           </div>
         </div>
+        
+        {/* Product Reviews */}
+        <ProductReviews product={product} reviews={reviews} />
         
         {/* Related Products */}
         {relatedProducts.length > 0 && (
