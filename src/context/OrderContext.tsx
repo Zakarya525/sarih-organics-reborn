@@ -21,7 +21,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
         .from('orders')
         .insert({
           order_number: orderNumber,
-          user_id: order.userId,
+          user_id: order.userId ? String(order.userId) : null,
           status: order.status,
           total: order.total,
           shipping_address: order.shippingAddress as unknown as Json,
