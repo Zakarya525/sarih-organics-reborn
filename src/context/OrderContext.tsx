@@ -14,13 +14,11 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const createOrder = async (order: Partial<Order>, cartItems: CartItem[]): Promise<string | null> => {
     try {
       // Create the order
-      const orderId = uuidv4();
       const orderNumber = `ORD-${Date.now()}`;
       
-      const { error: orderError } = await supabase
+      const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
-          id: orderId,
           order_number: orderNumber,
           user_id: order.userId,
           status: order.status,
@@ -29,7 +27,9 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
           billing_address: order.billingAddress,
           payment_method: order.paymentMethod,
           shipping_fee: order.shipping,
-        });
+        })
+        .select('id')
+        .single();
 
       if (orderError) {
         console.error("Error inserting order:", orderError);
@@ -38,7 +38,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       
       // Create order items
       const orderItems = cartItems.map(item => ({
-        order_id: orderId,
+        order_id: orderData.id,
         product_id: item.id.toString(),
         product_name: item.name,
         product_price: item.price,
