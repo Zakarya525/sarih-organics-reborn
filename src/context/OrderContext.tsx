@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext } from "react";
-import { CartItem, Order, OrderItem } from "@/types";
+import { CartItem, Order, OrderStatus } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 
 interface OrderContextProps {
