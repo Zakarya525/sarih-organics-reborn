@@ -16,19 +16,19 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       // Create the order
       const orderNumber = `ORD-${Date.now()}`;
       
-      // Insert into orders table with the values in an array
+      // Convert Address objects to Json format for Supabase
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
-        .insert([{
+        .insert({
           order_number: orderNumber,
           user_id: order.userId,
           status: order.status,
           total: order.total,
-          shipping_address: order.shippingAddress,
-          billing_address: order.billingAddress,
+          shipping_address: order.shippingAddress as unknown as Json,
+          billing_address: order.billingAddress as unknown as Json,
           payment_method: order.paymentMethod,
           shipping_fee: order.shipping,
-        }])
+        })
         .select('id')
         .single();
 
