@@ -1,4 +1,3 @@
-
 // Product related types
 export interface Product {
   id: number | string;
@@ -27,6 +26,9 @@ export interface Product {
   tags?: string[];
   reviews?: ProductReview[];
   relatedProducts?: (number | string)[];
+  rating?: number;
+  reviewCount?: number;
+  weightVariations?: string[];
 }
 
 export interface ProductReview {

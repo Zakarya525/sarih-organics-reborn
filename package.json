@@ -60,7 +60,11 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+<<<<<<< Updated upstream
     "uuid": "^9.0.1",
+=======
+    "uuid": "^11.1.0",
+>>>>>>> Stashed changes
     "vaul": "^0.9.3",
     "zod": "^3.23.8"
   },

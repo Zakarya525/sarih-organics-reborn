@@ -1,34 +1,66 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-sari-green-800 text-white pt-12 pb-8">
+    <footer className="bg-sari-green-800 text-sari-terracotta-800 pt-12 pb-8">
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-xl font-display font-bold">Sari Organics</h3>
-            <p className="text-sari-cream-100 text-sm">
-              Natural, organic products crafted with care from Bali. Supporting local farmers and sustainable practices since 2010.
+            <p className="text-sari-terracotta-800 text-sm">
+              Natural, organic products crafted with care from Bali. Supporting
+              local farmers and sustainable practices since 2010.
             </p>
             <div className="flex space-x-4 pt-2">
-              <a href="#" className="text-white hover:text-sari-cream-300 transition">
+              <a
+                href="#"
+                className="text-sari-terracotta-800 hover:text-black transition"
+              >
                 <span className="sr-only">Facebook</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
+                <svg
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </a>
-              <a href="#" className="text-white hover:text-sari-cream-300 transition">
+              <a
+                href="#"
+                className="text-sari-terracotta-800 hover:text-black transition"
+              >
                 <span className="sr-only">Instagram</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465.526.203 1.018.505 1.427.915.406.406.706.902.909 1.428.248.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a3.92 3.92 0 01-.914 1.427c-.408.407-.904.708-1.428.91-.636.248-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a3.994 3.994 0 01-1.428-.914c-.407-.408-.707-.904-.909-1.428-.248-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a3.907 3.907 0 01.915-1.427c.407-.408.903-.708 1.428-.91.636-.248 1.362-.416 2.427-.465C9.529 2.013 9.883 2 12.315 2z" clipRule="evenodd" />
+                <svg
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465.526.203 1.018.505 1.427.915.406.406.706.902.909 1.428.248.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a3.92 3.92 0 01-.914 1.427c-.408.407-.904.708-1.428.91-.636.248-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a3.994 3.994 0 01-1.428-.914c-.407-.408-.707-.904-.909-1.428-.248-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a3.907 3.907 0 01.915-1.427c.407-.408.903-.708 1.428-.91.636-.248 1.362-.416 2.427-.465C9.529 2.013 9.883 2 12.315 2z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </a>
-              <a href="#" className="text-white hover:text-sari-cream-300 transition">
+              <a
+                href="#"
+                className="text-sari-terracotta-800 hover:text-black transition"
+              >
                 <span className="sr-only">Twitter</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.45-4.288 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                 </svg>
               </a>
@@ -40,19 +72,44 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-sari-cream-100 hover:text-white transition">Home</Link>
+                <Link
+                  to="/"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Home
+                </Link>
               </li>
               <li>
-                <Link to="/shop" className="text-sari-cream-100 hover:text-white transition">Shop</Link>
+                <Link
+                  to="/shop"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Shop
+                </Link>
               </li>
               <li>
-                <Link to="/about" className="text-sari-cream-100 hover:text-white transition">About Us</Link>
+                <Link
+                  to="/about"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  About Us
+                </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-sari-cream-100 hover:text-white transition">Blog</Link>
+                <Link
+                  to="/blog"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Blog
+                </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-sari-cream-100 hover:text-white transition">Contact</Link>
+                <Link
+                  to="/contact"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Contact
+                </Link>
               </li>
             </ul>
           </div>
@@ -62,19 +119,44 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Categories</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/shop/granola" className="text-sari-cream-100 hover:text-white transition">Granola</Link>
+                <Link
+                  to="/shop/granola"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Granola
+                </Link>
               </li>
               <li>
-                <Link to="/shop/honey" className="text-sari-cream-100 hover:text-white transition">Honey</Link>
+                <Link
+                  to="/shop/honey"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Honey
+                </Link>
               </li>
               <li>
-                <Link to="/shop/cookies" className="text-sari-cream-100 hover:text-white transition">Cookies</Link>
+                <Link
+                  to="/shop/cookies"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Cookies
+                </Link>
               </li>
               <li>
-                <Link to="/shop/jams" className="text-sari-cream-100 hover:text-white transition">Jams & Spreads</Link>
+                <Link
+                  to="/shop/jams"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Jams & Spreads
+                </Link>
               </li>
               <li>
-                <Link to="/shop/gift-sets" className="text-sari-cream-100 hover:text-white transition">Gift Sets</Link>
+                <Link
+                  to="/shop/gift-sets"
+                  className="text-sari-terracotta-800 hover:text-black transition"
+                >
+                  Gift Sets
+                </Link>
               </li>
             </ul>
           </div>
@@ -82,7 +164,7 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2 text-sari-cream-100">
+            <ul className="space-y-2 text-sari-terracotta-800">
               <li>
                 <p>Jalan Raya Ubud, Bali, Indonesia</p>
               </li>
@@ -98,15 +180,26 @@ const Footer = () => {
 
         <div className="border-t border-sari-green-700 mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-sari-cream-100">© 2025 Sari Organics. All rights reserved.</p>
+            <p className="text-sm text-sari-terracotta-800">
+              © 2025 Sari Organics. All rights reserved.
+            </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
-              <Link to="/privacy-policy" className="text-sm text-sari-cream-100 hover:text-white transition">
+              <Link
+                to="/privacy-policy"
+                className="text-sm text-sari-terracotta-800 hover:text-black transition"
+              >
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-sm text-sari-cream-100 hover:text-white transition">
+              <Link
+                to="/terms"
+                className="text-sm text-sari-terracotta-800 hover:text-black transition"
+              >
                 Terms of Service
               </Link>
-              <Link to="/shipping" className="text-sm text-sari-cream-100 hover:text-white transition">
+              <Link
+                to="/shipping"
+                className="text-sm text-sari-terracotta-800 hover:text-black transition"
+              >
                 Shipping Info
               </Link>
             </div>
