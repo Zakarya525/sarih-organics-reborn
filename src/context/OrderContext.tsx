@@ -2,6 +2,7 @@
 import React, { createContext, useContext } from "react";
 import { CartItem, Order, OrderStatus } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 interface OrderContextProps {
   createOrder: (order: Partial<Order>, items: CartItem[]) => Promise<string | null>;
@@ -15,9 +16,10 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       // Create the order
       const orderNumber = `ORD-${Date.now()}`;
       
+      // Insert into orders table with the values in an array
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
-        .insert({
+        .insert([{
           order_number: orderNumber,
           user_id: order.userId,
           status: order.status,
@@ -26,7 +28,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
           billing_address: order.billingAddress,
           payment_method: order.paymentMethod,
           shipping_fee: order.shipping,
-        })
+        }])
         .select('id')
         .single();
 
