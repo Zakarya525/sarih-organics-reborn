@@ -15,7 +15,8 @@ export const getRelatedProducts = async (category: string): Promise<Product[]> =
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .eq('category', category);
+      .eq('category', category)
+      .limit(4);
     
     if (error) {
       console.error("Error fetching related products:", error);
@@ -27,7 +28,7 @@ export const getRelatedProducts = async (category: string): Promise<Product[]> =
       id: item.id,
       name: item.name,
       slug: item.slug,
-      description: item.description,
+      description: item.description || "",
       price: item.price,
       oldPrice: item.old_price,
       discount: item.discount || 0,
@@ -36,7 +37,7 @@ export const getRelatedProducts = async (category: string): Promise<Product[]> =
       category: item.category,
       isNew: item.is_new,
       isBestSeller: item.is_best_seller,
-      inStock: item.in_stock,
+      inStock: item.in_stock !== false, // Handle null/undefined
       stockQuantity: item.stock_quantity,
       weight: item.weight,
       ingredients: item.ingredients,

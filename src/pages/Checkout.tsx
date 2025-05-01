@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
@@ -84,28 +83,25 @@ const Checkout = () => {
 
   const insertOrder = async () => {
     try {
-      // Convert the product IDs to strings for Supabase
-      const orderItems = cart.map(item => ({
-        product_id: item.id.toString(), // Convert to string to match UUID type
-        product_name: item.name,
-        product_price: item.price,
-        quantity: item.quantity,
-        total: item.price * item.quantity
-      }));
+      // Create the shipping address as JSON
+      const shippingAddress = {
+        name: formData.name,
+        address: formData.address,
+        city: formData.city,
+        postal_code: formData.postalCode,
+        country: formData.country
+      };
 
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
           user_id: userInfo.id || null,
           order_number: `ORD-${Date.now()}`,
-          date: new Date().toISOString(),
           status: OrderStatus.Pending,
-          subtotal: calculateSubtotal(),
-          shipping: shippingCost,
-          tax: tax,
           total: total,
-          shipping_address: formData.address,
+          shipping_address: shippingAddress,
           payment_method: formData.paymentMethod,
+          shipping_fee: shippingCost,
         })
         .select('id')
         .single();
@@ -117,19 +113,20 @@ const Checkout = () => {
 
       const orderId = orderData.id;
 
+      // Format order items according to the table schema
+      const orderItems = cart.map(item => ({
+        order_id: orderId,
+        product_id: item.id.toString(),
+        product_name: item.name,
+        product_price: item.price,
+        quantity: item.quantity,
+        total: item.price * item.quantity
+      }));
+
       // Insert order items
       const { error: orderItemsError } = await supabase
         .from('order_items')
-        .insert(
-          orderItems.map(item => ({
-            order_id: orderId,
-            product_id: item.product_id,
-            product_name: item.product_name,
-            quantity: item.quantity,
-            price: item.product_price,
-            total: item.total,
-          }))
-        );
+        .insert(orderItems);
 
       if (orderItemsError) {
         console.error("Error inserting order items:", orderItemsError);
